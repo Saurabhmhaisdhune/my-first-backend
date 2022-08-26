@@ -132,10 +132,21 @@ app.get("/movies/:id", async function (request, response) {
 
 app.post('/movies', async function (request, response) {
   const data = request.body;
-  const result = await client.db("movies").collection("movie").insertMany(data);
+  const result = await client.db("movies").collection("movie").insertOne(data);
+  response.send(result);
+ });
+
+ app.get('/register', async function (request, response) {
+  const datas = await client.db("register").collection("signin").find({}).toArray();
+ response.send(datas)
+});
+
+app.post('/register/data', async function (request, response) {
+  const data = request.body;
+  const result = await client.db("register").collection("signin").insertOne(data);
   
   response.send(result);
  });
 
-//https://github.com/onkardeolankar/Mynode_project
+
 app.listen(PORT,()=>console.log(`APP is running ${PORT}`))
