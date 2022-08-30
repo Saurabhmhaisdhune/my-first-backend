@@ -8,6 +8,7 @@ const app = express()
 const PORT=process.env.PORT;
 
 // const MONGO_URL = "mongodb://127.0.0.1";
+
 const MONGO_URL= process.env.MONGO_URL;
 
 async function createConnection() {
@@ -18,9 +19,8 @@ async function createConnection() {
 }
 
 const client = await createConnection();
-app.use(express.json());
 
-//movie welcome get method =>
+app.use(express.json());
 
 app.get('/', function (request, response) {
   response.send("hello this a home page of all movies data")
@@ -107,14 +107,10 @@ const movies =[
   }
 ];
 
-//all movie get method =>
-
 app.get('/movies', async function (request, response) {
   const movies = await client.db("movies").collection("movie").find({}).toArray();
  response.send(movies)
 });
-
-//movie get by id method =>
 
 app.get("/movies/:id", async function (request, response) {
 
@@ -125,12 +121,11 @@ app.get("/movies/:id", async function (request, response) {
   .db("movies")
   .collection("movie")
   .findOne({ id : id });
+
   movie
   ?response.send(movie)
   :response.status(404).send({msg:"movie not found"});
 });
-
-//movie post method =>
 
 app.post('/movies', async function (request, response) {
   const data = request.body;
@@ -138,34 +133,15 @@ app.post('/movies', async function (request, response) {
   response.send(result);
  });
 
-//movie put method =>
- 
-app.put("/movies/:id", async function (request, response) {
-  const { id }=request.params;
-  console.log(request.params, id);
-
-  const movie=await client
-  .db("movies")
-  .collection("movie")
-  .updateOne({ id : id }, {$set:data});
-
-  movie
-  ?response.send(movie)
-  :response.status(404).send({msg:"movie not found"});
-});
-
- //registration get method =>
-
  app.get('/register', async function (request, response) {
   const datas = await client.db("register").collection("signin").find({}).toArray();
  response.send(datas)
 });
 
-//registration put method =>
-
 app.post('/register/data', async function (request, response) {
   const data = request.body;
   const result = await client.db("register").collection("signin").insertMany(data);
+  
   response.send(result);
  });
 
