@@ -127,6 +127,22 @@ app.get("/movies/:id", async function (request, response) {
   :response.status(404).send({msg:"movie not found"});
 });
 
+app.put("/movies/:id", async function (request, response) {
+
+  const { id }=request.params;
+  console.log(request.params, id);
+  const data= request.body;
+
+  const result=await client
+  .db("movies")
+  .collection("movie")
+  .updateOne({ id : id },{$set:data});
+
+  result
+  ?response.send(result)
+  :response.status(404).send({msg:"movie not found"});
+});
+
 app.post('/movies', async function (request, response) {
   const data = request.body;
   const result = await client.db("movies").collection("movie").insertOne(data);
