@@ -130,7 +130,7 @@ app.get("/movies/:id", async function (request, response) {
   :response.status(404).send({msg:"movie not found"});
 });
 
-//movie put method =>
+//movie post method =>
 
 app.post('/movies', async function (request, response) {
   const data = request.body;
@@ -138,15 +138,34 @@ app.post('/movies', async function (request, response) {
   response.send(result);
  });
 
+//movie put method =>
+ 
+app.put("/movies/:id", async function (request, response) {
+  const { id }=request.params;
+  console.log(request.params, id);
+
+  const movie=await client
+  .db("movies")
+  .collection("movie")
+  .updateOne({ id : id }, {$set:data});
+
+  movie
+  ?response.send(movie)
+  :response.status(404).send({msg:"movie not found"});
+});
+
+ //registration get method =>
+
  app.get('/register', async function (request, response) {
   const datas = await client.db("register").collection("signin").find({}).toArray();
  response.send(datas)
 });
 
+//registration put method =>
+
 app.post('/register/data', async function (request, response) {
   const data = request.body;
   const result = await client.db("register").collection("signin").insertMany(data);
-  
   response.send(result);
  });
 
