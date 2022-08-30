@@ -138,9 +138,24 @@ app.put("/movies/:id", async function (request, response) {
   .collection("movie")
   .updateOne({ id : id },{$set:data});
 
-  result
-  ?response.send(result)
-  :response.status(404).send({msg:"movie not found"});
+  result.modifiedCount > 0
+  ?response.send({msg:"movie successfully updated"})
+  :response.status(400).send({msg:"movie not found"});
+});
+
+app.delete("/movies/:id", async function (request, response) {
+
+  const { id }=request.params;
+  console.log(request.params, id);
+
+  const result=await client
+  .db("movies")
+  .collection("movie")
+  .deleteOne({ id : id });
+
+  result.deletedCount > 0
+  ?response.send({msg:"movie successfully deleted"})
+  :response.status(401).send({msg:"movie not found"});
 });
 
 app.post('/movies', async function (request, response) {
