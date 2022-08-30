@@ -4,15 +4,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
 const app = express()
 const PORT=process.env.PORT;
 
 // const MONGO_URL = "mongodb://127.0.0.1";
 
 const MONGO_URL= process.env.MONGO_URL;
-
- 
 
 async function createConnection() {
   const client = new MongoClient(MONGO_URL);
@@ -143,10 +140,9 @@ app.post('/movies', async function (request, response) {
 
 app.post('/register/data', async function (request, response) {
   const data = request.body;
-  const result = await client.db("register").collection("signin").insertOne(data);
+  const result = await client.db("register").collection("signin").insertMany(data);
   
   response.send(result);
  });
-
 
 app.listen(PORT,()=>console.log(`APP is running ${PORT}`))
