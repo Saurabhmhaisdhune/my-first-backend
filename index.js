@@ -8,7 +8,6 @@ const app = express()
 const PORT=process.env.PORT;
 
 // const MONGO_URL = "mongodb://127.0.0.1";
-
 const MONGO_URL= process.env.MONGO_URL;
 
 async function createConnection() {
@@ -19,8 +18,9 @@ async function createConnection() {
 }
 
 const client = await createConnection();
-
 app.use(express.json());
+
+//movie welcome get method =>
 
 app.get('/', function (request, response) {
   response.send("hello this a home page of all movies data")
@@ -107,10 +107,14 @@ const movies =[
   }
 ];
 
+//all movie get method =>
+
 app.get('/movies', async function (request, response) {
   const movies = await client.db("movies").collection("movie").find({}).toArray();
  response.send(movies)
 });
+
+//movie get by id method =>
 
 app.get("/movies/:id", async function (request, response) {
 
@@ -121,11 +125,12 @@ app.get("/movies/:id", async function (request, response) {
   .db("movies")
   .collection("movie")
   .findOne({ id : id });
-
   movie
   ?response.send(movie)
   :response.status(404).send({msg:"movie not found"});
 });
+
+//movie put method =>
 
 app.post('/movies', async function (request, response) {
   const data = request.body;
